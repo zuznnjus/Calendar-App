@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.NumberPicker
 import android.widget.TextView
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             val easterDate = calculateEasterDate(newValue)
             calculateAshWednesdayDate(easterDate)
             calculateCorpusChristiDate(easterDate)
-            calculateAdventDate()
+            calculateAdventDate(newValue)
 
             true
         }
@@ -70,7 +71,19 @@ class MainActivity : AppCompatActivity() {
         corpusChristiText.text = "Boże Ciało: $corpusChristiDate"
     }
 
-    private fun calculateAdventDate() {
+    private fun calculateAdventDate(selectedYear: Int) {
         val adventText: TextView = findViewById(R.id.adventId)
+        var adventDate = LocalDate.of(selectedYear, 12, 25)
+        val christmasDayOfWeek = adventDate.dayOfWeek
+
+        for (i in 1..7) {
+            if (christmasDayOfWeek.minus(i.toLong()) == DayOfWeek.SUNDAY) {
+                adventDate = adventDate.minusDays((3 * 7 + i).toLong())
+                break
+            }
+        }
+
+        val formattedAdventDate = adventDate.format(formatter)
+        adventText.text = "Adwent: $formattedAdventDate"
     }
 }
