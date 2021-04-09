@@ -1,15 +1,19 @@
 package com.example.perpetualcalendar
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.TextView
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+const val YEAR_MESSAGE = "YEAR"
+
 class MainActivity : AppCompatActivity() {
-    private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,9 +23,9 @@ class MainActivity : AppCompatActivity() {
         yearPicker.minValue = 1900
         yearPicker.maxValue = 2200
         yearPicker.wrapSelectorWheel = true
-        yearPicker.value = 2021
+        yearPicker.value = LocalDate.now().year
 
-        yearPicker.setOnValueChangedListener() {_, _, newValue ->
+        yearPicker.setOnValueChangedListener {_, _, newValue ->
             val easterDate = calculateEasterDate(newValue)
             calculateAshWednesdayDate(easterDate)
             calculateCorpusChristiDate(easterDate)
@@ -29,9 +33,19 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
+
+        val buttonSundays : Button = findViewById(R.id.buttonSundaysId)
+        buttonSundays.setOnClickListener {
+            showSundaysActivity(yearPicker.value)
+        }
+
+        val buttonWorkingDays : Button = findViewById(R.id.buttonWorkingDaysId)
+        buttonWorkingDays.setOnClickListener {
+            showWorkingDaysActivity()
+        }
     }
 
-    private fun calculateEasterDate(selectedYear: Int): LocalDate {
+    fun calculateEasterDate(selectedYear: Int): LocalDate {
         val a = selectedYear % 19
         val b = kotlin.math.floor(selectedYear / 100.0)
         val c = selectedYear % 100
@@ -61,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         val ashWednesdayDate = easterDate.minusDays(46).format(formatter)
 
         ashWednesdayText.text = "Popielec: $ashWednesdayDate"
-
     }
 
     private fun calculateCorpusChristiDate(easterDate : LocalDate ) {
@@ -71,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         corpusChristiText.text = "Boże Ciało: $corpusChristiDate"
     }
 
-    private fun calculateAdventDate(selectedYear: Int) {
+    private fun calculateAdventDate(selectedYear: Int): LocalDate {
         val adventText: TextView = findViewById(R.id.adventId)
         var adventDate = LocalDate.of(selectedYear, 12, 25)
         val christmasDayOfWeek = adventDate.dayOfWeek
@@ -85,5 +98,18 @@ class MainActivity : AppCompatActivity() {
 
         val formattedAdventDate = adventDate.format(formatter)
         adventText.text = "Adwent: $formattedAdventDate"
+
+        return adventDate
+    }
+
+    private fun showSundaysActivity(selectedYear: Int) {
+        val intent = Intent(this, SundaysActivity::class.java)
+        intent.putExtra(YEAR_MESSAGE, selectedYear)
+        startActivity(intent)
+    }
+
+    private fun showWorkingDaysActivity() {
+        val intent = Intent(this, WorkingDaysActivity::class.java)
+        startActivity(intent)
     }
 }
