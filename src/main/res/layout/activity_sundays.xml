@@ -20,9 +20,7 @@
         android:id="@+id/listId"
         android:layout_width="417dp"
         android:layout_height="391dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="38dp"
-        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textId" />
@@ -31,10 +29,12 @@
         android:id="@+id/okButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="128dp"
         android:text="Ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listId" />
 </androidx.constraintlayout.widget.ConstraintLayout>

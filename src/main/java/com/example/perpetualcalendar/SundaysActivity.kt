@@ -76,7 +76,7 @@ class SundaysActivity : AppCompatActivity() {
             sundayAugust = sundayAugust.with(previous(DayOfWeek.SUNDAY))
         }
 
-        val sundayEaster = MainActivity().calculateEasterDate(year).minusDays(7)
+        val sundayEaster = calculateEasterDate(year).minusDays(7)
 
         val sundayChristmasSecond = LocalDate.of(year, Month.DECEMBER, 25)
                 .with(previous(DayOfWeek.SUNDAY))

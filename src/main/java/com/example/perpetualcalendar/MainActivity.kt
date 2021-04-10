@@ -24,14 +24,10 @@ class MainActivity : AppCompatActivity() {
         yearPicker.maxValue = 2200
         yearPicker.wrapSelectorWheel = true
         yearPicker.value = LocalDate.now().year
+        displayDates(yearPicker.value)
 
         yearPicker.setOnValueChangedListener {_, _, newValue ->
-            val easterDate = calculateEasterDate(newValue)
-            calculateAshWednesdayDate(easterDate)
-            calculateCorpusChristiDate(easterDate)
-            calculateAdventDate(newValue)
-
-            true
+            displayDates(newValue)
         }
 
         val buttonSundays : Button = findViewById(R.id.buttonSundaysId)
@@ -45,29 +41,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun calculateEasterDate(selectedYear: Int): LocalDate {
-        val a = selectedYear % 19
-        val b = kotlin.math.floor(selectedYear / 100.0)
-        val c = selectedYear % 100
-        val d = kotlin.math.floor(b / 4)
-        val e = b % 4
-        val f = kotlin.math.floor((b + 8) / 25)
-        val g = kotlin.math.floor((b - f + 1) / 3)
-        val h = (19 * a + b - d - g + 15) % 30
-        val i = kotlin.math.floor(c / 4.0)
-        val k = c % 4
-        val l = (32 + 2 * e + 2 * i - h - k) % 7
-        val m = kotlin.math.floor((a + 11 * h + 22 * l) / 451)
-        val p = (h + l - 7 * m + 114) % 31
-        val day = (p + 1).toInt()
-        val month = kotlin.math.floor((h + l - 7 * m + 114) / 31).toInt()
+    private fun displayDates(year: Int) {
+        val easterDate = calculateEaster(year)
+        calculateAshWednesdayDate(easterDate)
+        calculateCorpusChristiDate(easterDate)
+        calculateAdventDate(year)
+    }
 
+    private fun calculateEaster(selectedYear: Int): LocalDate {
+        val easterDate = calculateEasterDate(selectedYear)
         val easterText: TextView = findViewById(R.id.easterId)
-        val easterDate = LocalDate.of(selectedYear, month, day).format(formatter)
+        val formattedEasterDate = easterDate.format(formatter)
 
-        easterText.text = "Wielkanoc: $easterDate"
-
-        return LocalDate.of(selectedYear, month, day)
+        easterText.text = "Wielkanoc: $formattedEasterDate"
+        return easterDate
     }
 
     private fun calculateAshWednesdayDate(easterDate : LocalDate ) {
