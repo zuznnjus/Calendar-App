@@ -1,4 +1,5 @@
 # Calendar-App
 Android calendar app:
-  - calculates date of Easter and other holidays
-  - calculates number of working days between two dates
+  - *MainActivity* - calculates the date of Easter and other holidays in a selected year
+  - *WorkingDaysActivity* - calculates number of working days between two selected dates
+  - *SundaysActivity* - calculates dates of Sundays without ban on trading in a selected year
